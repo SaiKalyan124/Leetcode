@@ -1,0 +1,55 @@
+https://leetcode.com/problems/top-k-frequent-elements/description/
+
+### O(n klog k) Solution ###
+
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        
+        freq={} #dict to count frequency
+        
+        #define the result list as per the length of the nums
+        #example nums=[1,2,3] result=[[],[],[]]
+        length=len(nums)+1
+        result=[[]for i in range(len(nums)+1)] 
+        
+        #traverse the nums list to count the frequency of number
+        for i in nums:
+            freq[i]=freq.get(i,0)+1
+        
+        #append the list to the result list based on the value of freq dict
+        for key,value in freq.items():
+            result[value].append(key)
+            
+        #result example:[[], [3], [2], [1], [], [], []]
+        
+        #get non zero list and numbers from result by traversing in reverse direction
+        
+        final=[] #to store the final answer
+        for i in range(len(result)-1,-1,-1):# iterate in reverse order
+            if result[i] and len(final)<k: #check if final list length equal to k
+                final.extend(result[i]) # .extend to extend the same list
+        return final
+
+### O(n) Solution ###
+def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        freq={}
+        for i in nums:
+            freq[i]=freq.get(i,0)+1
+        
+        #heapq.heappop(heap) removes and returns the smallest element from the heap while maintaining the heap property. 
+        #In the case of a list of tuples, such as [(2, 2), (3, 1)], heappop uses the first element of each tuple to determine the order of the elements in the heap. 
+        #If the first elements of two tuples are equal, heappop uses the second element to break the tie.
+        heap=[]
+        for key,value in freq.items():
+            heapq.heappush(heap,(key,value))
+            if len(heap)>k:
+                heapq.heappop(heap)
+        print(heap)
+        result=[]
+        
+        while heap:
+            # print(heap[-1])
+            #heapq.heappop(heap)[-1] would remove the smallest tuple from the heap and return its second element.
+            result.append(heapq.heappop(heap)[-1])
+            
+        return result[::-1]
