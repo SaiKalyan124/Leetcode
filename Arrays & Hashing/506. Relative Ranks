@@ -1,0 +1,34 @@
+Approach : store the score in max_heap and pass them to the dict by assigning the rank to it. Finally print the result as per the list score
+
+import heapq
+class Solution:
+    def findRelativeRanks(self, score: List[int]) -> List[str]:
+        #assigning medals
+        medals=["Gold Medal","Silver Medal","Bronze Medal"]
+        
+        #max heap using list score
+        heap=[]
+        for i in score:
+            heapq.heappush(heap,-i)
+        #defining dict rank
+        rank={}
+        rank_count =0
+        topk=[-s for s in heap]
+        
+        
+        #assign ranks by poping least element from max_heap
+        while heap:
+            #pop least element from max_heap
+            s = -heapq.heappop(heap)
+            rank_count += 1
+            if rank_count <= 3:
+                rank[s] = medals[rank_count-1]
+            else:
+                rank[s] = str(rank_count)
+
+        #get the result as per list score
+        result=[]
+        for i in score:
+            result.append(str(rank[i]))
+        return result
+
